@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/styles/style.css</file>
+        <file>res/styles/style_chat.css</file>
+    </qresource>
+</RCC>

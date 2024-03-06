@@ -1,0 +1,321 @@
+QWidget#chatwin{
+    border: 1px;
+    border-color: Silver;
+    border-style: solid;
+    border-radius: 10px; 
+    background-color:white;
+}
+/*关闭*/
+QPushButton#close_btn{
+    border:none;
+    border-radius: 10px; 
+}
+QPushButton#close_btn:hover{
+    background-color: rgb(219, 75, 75);
+}
+/*发送*/
+QPushButton#enter_btn{
+    background-color: rgb(227, 227, 227);
+	color:green; 
+	font-size: 18px;
+    border-radius: 10px; 
+}
+QPushButtonenter_btn:hover{
+	background-color: Silver;
+    text-decoration: underline;
+}
+QPushButtonenter_btn:pressed{
+    background-color: rgb(175, 175, 175);
+}
+/*最小化*/
+QPushButton#min_btn{
+    border:none;
+    border-radius: 10px; 
+}
+QPushButton#min_btn:hover{
+    background-color: rgb(219, 75, 75);
+}
+/*输入框*/
+QTextEdit#charEdit{
+
+    font-size:18px;
+}
+/*logo*/
+QLabel#logo{
+    border:none;
+    border-image:url(:/res/icons/icon1.png);
+}
+/*meue*/
+QWidget#meue_wid{
+    background-color:rgb(80, 80, 80);
+    border-radius: 10px; 
+    border:none;
+}
+/*表情栏*/
+QWidget#tool_wid{
+    border: 1px;
+    border-color:silver;
+    border-style: solid;
+}
+/*user*/
+QWidget#user_wid{
+    background-color:rgb(222, 222, 222);
+    border:none;
+    border-radius: 0px; 
+}
+/*select*/
+QWidget#select_wid{
+    background-color:rgb(255, 255, 255);
+    border: 1px;
+    border-right: 1px;
+    border-color: Silver;
+    border-style: solid;
+
+}
+/*add_btn*/
+QPushButton#add_btn{
+    background-color:rgb(222, 222, 222);
+    font-size:20px;
+    border-radius:8px;
+}
+QPushButton#add_btn:hover{
+    background-color: Silver;
+}
+QPushButton#add_btn:pressed{
+    background-color: rgb(175, 175, 175);
+}
+QLineEdit#select_line{
+    border: 1px;
+    border-radius:10px;
+    border-color: Silver;
+    border-style: solid;
+    background-color:rgb(222, 222, 222);
+    font-size:18px;
+}
+
+/*功能按钮*/
+/*设置*/
+QPushButton#function_btn{
+    border: none;
+    image:url(:/res/icons/function_B.png);
+}
+QPushButton#function_btn:hover{
+    border: none;
+    image:url(:/res/icons/function_L.png);
+}
+QPushButton#function_btn:pressed{
+    border: none;
+    image:url(:/res/icons/function_B.png);
+}
+/*home*/
+QPushButton#home_btn{
+    border: none;
+    image:url(:/res/icons/home_B.png);
+}
+QPushButton#home_btn:hover{
+    border: none;
+    image:url(:/res/icons/home_L.png);
+}
+QPushButton#home_btn:pressed{
+    border: none;
+    image:url(:/res/icons/home_B.png);
+}
+/*手机*/
+QPushButton#pho_btn{
+    border: none;
+    image:url(:/res/icons/pho_B.png);
+}
+QPushButton#pho_btn:hover{
+    border: none;
+    image:url(:/res/icons/pho_L.png);
+}
+QPushButton#pho_btn:pressed{
+    border: none;
+    image:url(:/res/icons/pho_B.png);
+}
+/*game*/
+QPushButton#game_btn{
+    border: none;
+    image:url(:/res/icons/game_B.png);
+}
+QPushButton#game_btn:hover{
+    border: none;
+    image:url(:/res/icons/game_L.png);
+}
+QPushButton#game_btn:pressed{
+    border: none;
+    image:url(:/res/icons/game_B.png);
+}
+/*man_btn*/
+QPushButton#man_btn{
+    border: none;
+    image:url(:/res/icons/man_B.png);
+}
+QPushButton#man_btn:hover{
+    border: none;
+    image:url(:/res/icons/man_L.png);
+}
+QPushButton#man_btn:pressed{
+    border: none;
+    image:url(:/res/icons/man_B.png);
+}
+/*info_btn*/
+QPushButton#info_btn{
+    border: none;
+    image:url(:/res/icons/info_B.png);
+}
+QPushButton#info_btn:hover{
+    border: none;
+    image:url(:/res/icons/info_L.png);
+}
+QPushButton#info_btn:pressed{
+    border: none;
+    image:url(:/res/icons/info_B.png);
+}
+/*chat_btn*/
+QPushButton#chat_btn{
+    border: none;
+    image:url(:/res/icons/chat_B.png);
+}
+QPushButton#chat_btn:hover{
+    border: none;
+    image:url(:/res/icons/chat_L.png);
+}
+QPushButton#chat_btn:pressed{
+    border: none;
+    image:url(:/res/icons/chat_B.png);
+}
+/*date*/
+QPushButton#date_btn{
+    border: none;
+    image:url(:/res/icons/date_B.png);
+}
+QPushButton#date_btn:hover{
+    border: none;
+    image:url(:/res/icons/date_L.png);
+}
+QPushButton#date_btn:pressed{
+    border: none;
+    image:url(:/res/icons/date_B.png);
+}
+/*mus*/
+QPushButton#mus_btn{
+    border: none;
+    image:url(:/res/icons/mus_B.png);
+}
+QPushButton#mus_btn:hover{
+    border: none;
+    image:url(:/res/icons/mus_L.png);
+}
+QPushButton#mus_btn:pressed{
+    border: none;
+    image:url(:/res/icons/mus_B.png);
+}
+/*聊天工具栏*/
+/*表情*/
+QPushButton#emoji_btn{
+    border: none;
+    image:url(:/res/icons/emoji_B.png);
+}
+QPushButton#emoji_btn:hover{
+    border: none;
+    image:url(:/res/icons/emoji_L.png);
+}
+
+/*截图*/
+QPushButton#cut_btn{
+    border: none;
+    image:url(:/res/icons/cut_B.png);
+}
+QPushButton#cut_btn:hover{
+    border: none;
+    image:url(:/res/icons/cut_L.png);
+}
+
+/*文件*/
+QPushButton#file_btn{
+    border: none;
+    image:url(:/res/icons/file_B.png);
+}
+QPushButton#file_btn:hover{
+    border: none;
+    image:url(:/res/icons/file_L.png);
+}
+
+/*图片*/
+QPushButton#pic_btn{
+    border: none;
+    image:url(:/res/icons/pic_B.png);
+}
+QPushButton#pic_btn:hover{
+    border: none;
+    image:url(:/res/icons/pic_L.png);
+}
+/*震动*/
+QPushButton#zd_btn{
+    border: none;
+    image:url(:/res/icons/zd_B.png);
+}
+QPushButton#zd_btn:hover{
+    border: none;
+    image:url(:/res/icons/zd_L.png);
+}
+/*语音*/
+QPushButton#voice_btn{
+    border: none;
+    image:url(:/res/icons/voice_B.png);
+}
+QPushButton#voice_btn:hover{
+    border: none;
+    image:url(:/res/icons/voice_L.png);
+}
+/*位置*/
+QPushButton#place_btn{
+    border: none;
+    image:url(:/res/icons/place_B.png);
+}
+QPushButton#place_btn:hover{
+    border: none;
+    image:url(:/res/icons/place_L.png);
+}
+
+/*对话栏*/
+QListWidget#listWidget{
+    border: none;
+}
+QListWidget#listWidget::verticalScrollBar {  
+    width: 20px;  
+    border-radius:8px;
+}  
+  
+QListWidget#listWidget::verticalScrollBar:handle {  
+    background-color: darkgray;  
+    min-height: 20px;  
+    border-radius:8px;
+}  
+  
+QListWidget#listWidget::verticalScrollBar:handle:hover {  
+    background-color: gray;  
+    border-radius:8px;
+}  
+  
+QListWidget#listWidget::verticalScrollBar:handle:pressed {  
+    background-color: lightgray;  
+    border-radius:8px;
+}
+/*输入栏*/
+QPlainTextEdit#plainTextEdit{
+    background-color:rgb(255, 255, 255);
+    font-size:22px;
+    border: none;
+}
+QScrollBar#vScrollbar::vertical{
+
+    width: 8px;                     /* 滚动条的宽度 */  
+    height: 50px;                   /* 滚动条的高度，通常不需要设置，因为它会自动调整 */  
+    background: rgb(220, 220, 220);            /* 滚动条的背景颜色 */  
+  
+    /* 更多属性 */  
+    margin: 0px;                    /* 滚动条与周围内容的边距 */  
+    padding: 0px;                   /* 滚动条内部内容的填充 */  
+}
