@@ -7,7 +7,7 @@
 #include <QStringList>
 #include <QPair>
 #include <QVector>
-
+/*消息栏*/
 class Completer: public QCompleter
 {
 Q_OBJECT

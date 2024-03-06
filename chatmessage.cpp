@@ -37,14 +37,14 @@ void ChatMessage::setTextSuccess()
     m_isSending = true;
 }
 
-void ChatMessage::setText(QString text, QString time, QSize allSize, QString ip,ChatMessage::User_Type userType)
+void ChatMessage::setText(QString text, QString time, QSize allSize, QString id,ChatMessage::User_Type userType)
 {
     m_msg = text;
     m_userType = userType;
     m_time = time;
     m_curTime = QDateTime::fromTime_t(time.toInt()).toString("ddd hh:mm");
     m_allSize = allSize;
-    m_ip = ip;
+    m_id = id;
     if(userType == User_Me) {
         if(!m_isSending) {
             m_loading->move(m_kuangRightRect.x() - m_loading->width() - 10, m_kuangRightRect.y()+m_kuangRightRect.height()/2- m_loading->height()/2);
@@ -99,9 +99,9 @@ QSize ChatMessage::fontRect(QString str)
                             m_kuangRightRect.width()-2*textSpaceRect, m_kuangRightRect.height()-2*iconTMPH);
 
 
-    m_ipLeftRect.setRect(m_kuangLeftRect.x()-25, m_kuangLeftRect.y()+iconTMPH - 30,
+    m_idLeftRect.setRect(m_kuangLeftRect.x()-25, m_kuangLeftRect.y()+iconTMPH - 30,
                             2*textSpaceRect + iconWH*2 , 20);
-    m_ipRightRect.setRect(m_kuangRightRect.x()+m_kuangRightRect.width()-75, m_kuangRightRect.y()+iconTMPH - 30,
+    m_idRightRect.setRect(m_kuangRightRect.x()+m_kuangRightRect.width()-75, m_kuangRightRect.y()+iconTMPH - 30,
                             2*textSpaceRect + iconWH*2 , 20);
     return QSize(size.width(), hei + 15);
 }
@@ -189,16 +189,16 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         painter.drawLine(QPointF(m_sanjiaoLeftRect.x() - 1, 30), QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 24));
         painter.drawLine(QPointF(m_sanjiaoLeftRect.x() - 1, 30), QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 36));
         */
-        //ip
-        //ip
-        QPen penIp;
-        penIp.setColor(Qt::darkGray);
-        painter.setPen(penIp);
+        //id
+        //id
+        QPen penid;
+        penid.setColor(Qt::darkGray);
+        painter.setPen(penid);
         QFont f = this->font();
         f.setPointSize(10);
         QTextOption op(Qt::AlignHCenter | Qt::AlignVCenter);
         painter.setFont(f);
-        painter.drawText(m_ipLeftRect, m_ip, op);
+        painter.drawText(m_idLeftRect, m_id, op);
 
         //内容
         QPen penText;
@@ -230,15 +230,15 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         painter.drawPolygon(points, 3);
 
 
-        //ip
-        QPen penIp;
-        penIp.setColor(Qt::black);
-        painter.setPen(penIp);
+        //id
+        QPen penid;
+        penid.setColor(Qt::black);
+        painter.setPen(penid);
         QFont f = this->font();
         f.setPointSize(10);
         QTextOption op(Qt::AlignHCenter | Qt::AlignVCenter);
         painter.setFont(f);
-        painter.drawText(m_ipRightRect, m_ip, op);
+        painter.drawText(m_idRightRect, m_id, op);
 
         //内容
         QPen penText;
