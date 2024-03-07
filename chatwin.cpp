@@ -19,11 +19,22 @@ chatwin::chatwin(QWidget *parent, QString Name) :
 {
     //初始化
     this->initUI();
+    //全部connect函数
+    this->allConnect();
+    //style文件
+    QFile file("://res/styles/style_chat.css");
+    file.open(QFile::ReadOnly);
+    if(!file.isOpen()){
+        QMessageBox::warning(this,"","样式加载失败，文件不存在");
+    }
+    //设置style
+    this->setStyleSheet(file.readAll());
 }
 
 void chatwin::initUI()
 {
     ui->setupUi(this);
+    this->setWindowTitle("NewChat");
     //窗口初始化
     this->setWindowIcon(QIcon(":/res/icons/icon.png"));
     //透明背景
@@ -31,8 +42,7 @@ void chatwin::initUI()
     setWindowFlags(Qt::FramelessWindowHint);
     //在线状态图片大小缩放
     ui->online->setScaledContents(true);
-    //全部connect函数
-    this->allConnect();
+
     //初始化客户端聊天昵称
     class thread proc_client_init(&chatwin::Client_init,this, this->name);
     proc_client_init.detach();
@@ -54,14 +64,6 @@ void chatwin::initUI()
     // 将垂直滚动条设置到QTableWidget中
     ui->listWidget->setVerticalScrollBar(vScrollbar);
 
-    //style文件
-    QFile file("://res/styles/style_chat.css");
-    file.open(QFile::ReadOnly);
-    if(!file.isOpen()){
-        QMessageBox::warning(this,"","样式加载失败，文件不存在");
-    }
-    //设置style
-    this->setStyleSheet(file.readAll());
 }
 
 chatwin::~chatwin()
@@ -139,6 +141,7 @@ void chatwin::child_fun(SOCKET fd)
     }
     closesocket(fd);
 }
+
 /*------------------绘制窗口圆角-------------------*/
 void chatwin::paintEvent(QPaintEvent *event)
 {
@@ -186,9 +189,10 @@ void chatwin::allConnect()
             ui->enter_btn->click();
         }
     });
-
+    //接收与发送消息显示
     connect(this,&chatwin::resultReady_She,this,&chatwin::recvMsg);
     connect(this,&chatwin::resultReady_Me,this,&chatwin::sendMsg);
+
 }
 /*---------------服务器在线状态显示----------------*/
 void chatwin::online()
@@ -255,6 +259,7 @@ void chatwin::sendMsg(QString text)
 
 void chatwin::recvMsg(QString text)
 {
+    //提示音
     QSound::play("://res/music/msg.wav");
     QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
     ChatMessage *message = new ChatMessage(ui->listWidget);
@@ -262,6 +267,7 @@ void chatwin::recvMsg(QString text)
     dealMessageTime(time);
     dealMessage(message, item, text, time, name ,ChatMessage::User_She);
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
+
 }
 
 /*--------------------按钮----------------------*/
@@ -286,7 +292,6 @@ void chatwin::on_enter_btn_clicked()
     }
     qDebug()<<msg;
     ui->plainTextEdit->setPlainText("");
-
     emit resultReady_Me(msg);
     this->client_sent(msg);
 }

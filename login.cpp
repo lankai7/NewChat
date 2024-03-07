@@ -42,6 +42,7 @@ void login::onDrag(const QPoint &pos) {
 
 void login::initUI()
 {
+    this->setWindowTitle("NewChat");
     //最小化按钮
     QPixmap picMin(":/res/icons/min.png");
     picMin.scaled(30,40);

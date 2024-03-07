@@ -17,6 +17,7 @@
 #include "netheader.h"
 #include <QStringListModel>
 #include <QMutex>
+#include <QUrl>
 
 /*聊天主窗口*/
 
@@ -76,8 +77,9 @@ private:
 
 
 public slots:
+    //收到信息界面更新
     void recvMsg(const QString text);
-
+    //发送信息界面更新
     void sendMsg(const QString text);
 
 private slots:
@@ -101,9 +103,9 @@ signals:
     void dragSignal(const QPoint&);
     //聊天输出
     void PushText(MSG_TYPE, QString = "");
-
+    //收到消息信号
     void resultReady_She(const QString &text);
-
+    //发送消息信号
     void resultReady_Me(const QString &text);
 
 protected:
