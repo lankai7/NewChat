@@ -11,11 +11,12 @@
 #include <QDateTime>
 #include <QStringListModel>
 #include <QSound>
+#include <algorithm>
 
 chatwin::chatwin(QWidget *parent, QString Name) :
     QWidget(parent),
     ui(new Ui::chatwin),
-    name(Name)
+    name_Me(Name)
 {
     //初始化
     this->initUI();
@@ -44,7 +45,7 @@ void chatwin::initUI()
     ui->online->setScaledContents(true);
 
     //初始化客户端聊天昵称
-    class thread proc_client_init(&chatwin::Client_init,this, this->name);
+    std::thread proc_client_init(&chatwin::Client_init,this, this->name_Me);
     proc_client_init.detach();
 
     //最小化图标
@@ -73,68 +74,77 @@ chatwin::~chatwin()
     close_Socket();
 }
 
-void chatwin::get_name(QString Name)
-{
-    this->name=Name;
+void chatwin::get_name(QString Name){
+    this->name_Me=Name;
 }
 /*----------------客户端初始化-------------------*/
 void chatwin::Client_init(QString Name)
 {
     init_Socket();
-    char recvBuf[1024];
     fd = create_clientSocket("127.0.0.1");
-    if(fd == INVALID_SOCKET){
-        offline();
-    }
     while(fd == INVALID_SOCKET){
+        offline();
         fd = create_clientSocket("127.0.0.1");
     }
     online();
-    const char *Buf = new char[1024];
-    Buf = Name.toUtf8().constData();
-    strncpy(recvBuf, Buf,sizeof(recvBuf));
-    recvBuf[sizeof(recvBuf) - 1] = '\0';
-    int ret = send(fd, recvBuf, strlen(recvBuf), 0);
+    // 发送用户名到服务器
+    QByteArray utf8Name = Name.toUtf8();
+    char sendBuf[1024];
+    int copySize = std::min(utf8Name.size(),int(sizeof(sendBuf)));
+    // 防止缓冲区溢出
+    memcpy(sendBuf, utf8Name.constData(), copySize); // 使用 memcpy 确保不会截断 UTF-8 字符串
+    sendBuf[copySize] = '\0'; // 确保字符串正确终止
+    qDebug()<<"connect:"<<sendBuf<<endl;
+    int ret = send(fd, sendBuf, strlen(sendBuf), 0);
     if (ret <= 0) {
+        // 发送失败
         err("send");
-
-        //closesocket(fd);
+        closesocket(fd);
+        offline();
+        qDebug() << "Failed to send data to server.";
+        return;
     }
-        class thread proc_client(&chatwin::child_fun,this, fd);
-        proc_client.detach();
+        // 启动线程处理客户端通信
+        std::thread proc_client(&chatwin::child_fun,this, fd);
+        proc_client.detach();// 分离线程，允许它在后台运行
+
 }
 /*---------------客户端发送消息-------------------*/
-void chatwin::client_sent(QString buf)
+void chatwin::client_sent(const QString &buf)
 {
-    const char* Buf = new char[1024];
-    Buf = buf.toUtf8().constData();
-    char recvBuf[1024];
-    strncpy(recvBuf, Buf,sizeof(recvBuf));
-    recvBuf[sizeof(recvBuf) - 1] = '\0';
-    int ret = send(fd, recvBuf, strlen(recvBuf), 0);
+    QByteArray byteArray = buf.toUtf8();
+    const char *data = byteArray.constData();
+    int dataSize = byteArray.size();
+
+    int ret = send(fd, data, dataSize, 0);
     if (ret <= 0) {
-        err("send");
+        // 假设 err 是一个接受字符串参数的自定义错误处理函数
+        err("send data");
     }
 }
 
 void chatwin::child_fun(SOCKET fd)
 {
     int ret;
+    char recvName[256];
     char recvBuf[1024];
 
     while (1) {
+        memset(recvName, 0, sizeof(recvName));
         memset(recvBuf, 0, sizeof(recvBuf));
+        ret = recv(fd, recvName, sizeof(recvName), 0);
         ret = recv(fd, recvBuf, sizeof(recvBuf), 0);
 
         if (ret <= 0) {
             err("recv");
-            class thread proc_client_init(&chatwin::Client_init,this, this->name);
+            std::thread proc_client_init(&chatwin::Client_init,this, this->name_Me);
             proc_client_init.detach();
             break;
         }
         else{
+            name_She = QString::fromUtf8(recvName);
             QString strl = QString::fromUtf8(recvBuf);
-            qDebug()<<str<<endl;
+            qDebug()<<name_She<<":"<<strl<<endl;
             emit resultReady_She(strl);
         }
     }
@@ -158,14 +168,11 @@ void chatwin::paintEvent(QPaintEvent *event)
             painterPath.addRoundedRect(rect, 15, 15);
 
         }*/
-        QWidget::paintEvent(event);
         QStyleOption opt;
-            opt.initFrom(this);
-            QPainter p(this);
-            style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-            QWidget::paintEvent(event);
-            painter.end();
-
+        opt.initFrom(this);
+        QPainter p(this);
+        style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+        QWidget::paintEvent(event);
 
 }
 /*------------------输入框发送-------------------*/
@@ -251,7 +258,7 @@ void chatwin::sendMsg(QString text)
     ChatMessage *message = new ChatMessage(ui->listWidget);
     QListWidgetItem *item = new QListWidgetItem();
     dealMessageTime(time);
-    dealMessage(message, item, text, time, name ,ChatMessage::User_Me);
+    dealMessage(message, item, text, time, name_Me ,ChatMessage::User_Me);
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 
 }
@@ -264,7 +271,7 @@ void chatwin::recvMsg(QString text)
     ChatMessage *message = new ChatMessage(ui->listWidget);
     QListWidgetItem *item = new QListWidgetItem();
     dealMessageTime(time);
-    dealMessage(message, item, text, time, name ,ChatMessage::User_She);
+    dealMessage(message, item, text, time, name_She ,ChatMessage::User_She);
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 
 }

@@ -39,7 +39,7 @@ public:
     //客户端初始化
     void Client_init(QString Name);
     //发送信息
-    void client_sent(QString buf);
+    void client_sent(const QString &buf);
 private:
     //接收信息子进程
     void child_fun(SOCKET fd);
@@ -67,7 +67,8 @@ private:
     //客户端连接
     SOCKET fd;
     //客户端名称
-    QString name;
+    QString name_Me;
+    QString name_She;
     //接收消息
     QString str;
 
