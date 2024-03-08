@@ -128,10 +128,9 @@ void chatwin::child_fun(SOCKET fd)
 
         if (ret <= 0) {
             err("recv");
-//            class thread proc_client_init(&chatwin::Client_init,this, this->name);
-//            proc_client_init.detach();
-//            break;
-            continue;
+            class thread proc_client_init(&chatwin::Client_init,this, this->name);
+            proc_client_init.detach();
+            break;
         }
         else{
             QString strl = QString::fromUtf8(recvBuf);
