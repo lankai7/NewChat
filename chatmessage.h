@@ -18,6 +18,7 @@ public:
     };
     void setTextSuccess();
     void setText(QString text, QString time, QSize allSize, QString id = "",  User_Type userType = User_Time);
+    void setPicture(QPixmap pixmap, QString time, QSize allSize, QString id = "",  User_Type userType = User_Time);
 
     QSize getRealString(QString src);
     QSize fontRect(QString str);
@@ -29,6 +30,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 private:
     QString m_msg;
+    QPixmap m_pic;
     QString m_time;
     QString m_curTime;
     QString m_id;
@@ -51,11 +53,21 @@ private:
     QRect m_kuangRightRect;
     QRect m_textLeftRect;
     QRect m_textRightRect;
+    QRect m_picRect;
     QPixmap m_leftPixmap;
     QPixmap m_rightPixmap;
     QLabel* m_loading = Q_NULLPTR;
     QMovie* m_loadingMovie = Q_NULLPTR;
     bool m_isSending = false;
+
+    int minHei = 30;
+    int iconWH = 40;
+    int iconSpaceW = 20;
+    int iconRectW = 5;
+    int iconTMPH = 10;
+    int sanJiaoW = 6;
+    int kuangTMP = 20;
+    int textSpaceRect = 12;
 };
 
 #endif // CHATMESSAGE_H

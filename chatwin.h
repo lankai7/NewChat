@@ -1,3 +1,4 @@
+void on_file_btn_clicked();
 #ifndef CHATWIN_H
 #define CHATWIN_H
 
@@ -18,6 +19,8 @@
 #include <QStringListModel>
 #include <QMutex>
 #include <QUrl>
+#include <QFileDialog>
+#include "PicByte.h"
 
 /*聊天主窗口*/
 
@@ -53,9 +56,10 @@ private:
     void online();
     void offline();
 
-    //获取当前时间
+    //处理消息与时间
     void dealMessage(ChatMessage *messageW, QListWidgetItem *item, QString text, QString time, QString id ,ChatMessage::User_Type type); //用户发送文本
     void dealMessageTime(QString curMsgTime); //处理时间
+    void dealPicture(ChatMessage *messageP, QListWidgetItem *item, QPixmap pixmap, QString time, QString id ,ChatMessage::User_Type type);
 private:
     //滚动条
     QScrollBar* vScrollbar;
@@ -76,13 +80,18 @@ private:
     //初始化
     void initUI();
 
+    QPixmap picRule(QPixmap pixmap);
+
 
 public slots:
     //收到信息界面更新
     void recvMsg(const QString text);
     //发送信息界面更新
     void sendMsg(const QString text);
-
+    //收到信息界面更新
+    void recvPic(const QPixmap pic);
+    //发送图片界面更新
+    void sendPic(const QPixmap pic);
 private slots:
     //窗口移动
     void onDrag(const QPoint &pos) {
@@ -98,6 +107,10 @@ private slots:
 
     //音乐按钮
     void on_mus_btn_clicked();
+    //发送文件
+    void on_file_btn_clicked();
+
+    void on_pic_btn_clicked();
 
 signals:
     //移动窗口信号
@@ -108,6 +121,10 @@ signals:
     void resultReady_She(const QString &text);
     //发送消息信号
     void resultReady_Me(const QString &text);
+    //收到信息信号
+    void Pic_She(const QPixmap pic);
+    //发送图片信号
+    void Pic_Me(const QPixmap pic);
 
 protected:
     //窗口可以拖动鼠标事件

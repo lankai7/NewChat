@@ -1,4 +1,4 @@
-#include "chatmessage.h"
+ #include "chatmessage.h"
 #include <QFontMetrics>
 #include <QPaintEvent>
 #include <QDateTime>
@@ -15,26 +15,10 @@ ChatMessage::ChatMessage(QWidget *parent) : QWidget(parent)
     te_font.setPointSize(12);             // 设置字体大小为12点
     this->setFont(te_font);               // 应用修改后的字体设置
 
-    // 加载左侧和右侧的背景图片
+    // 加载左侧和右侧的头像图片
     m_leftPixmap = QPixmap("://res/bak/1.jpg");
     m_rightPixmap = QPixmap("://res/bak/1.jpg");
 
-    // 创建并设置加载动画
-    m_loadingMovie = new QMovie(this);              // 创建QMovie对象
-    m_loadingMovie->setFileName(":/myImage/3.gif"); // 设置动画文件路径
-    m_loading = new QLabel(this);                   // 创建QLabel对象，用于显示动画
-    m_loading->setMovie(m_loadingMovie);            // 将动画设置到QLabel上
-    m_loading->setScaledContents(true);             // 设置QLabel的内容可以缩放以适应其大小
-    m_loading->resize(40, 40);                       // 设置QLabel的大小为40x40像素
-    m_loading->setAttribute(Qt::WA_TranslucentBackground, true); // 设置QLabel的背景为半透明
-
-}
-
-void ChatMessage::setTextSuccess()
-{
-    m_loading->hide();
-    m_loadingMovie->stop();
-    m_isSending = true;
 }
 
 void ChatMessage::setText(QString text, QString time, QSize allSize, QString id,ChatMessage::User_Type userType)
@@ -45,31 +29,28 @@ void ChatMessage::setText(QString text, QString time, QSize allSize, QString id,
     m_curTime = QDateTime::fromTime_t(time.toInt()).toString("ddd hh:mm");
     m_allSize = allSize;
     m_id = id;
-    if(userType == User_Me) {
-        if(!m_isSending) {
-            m_loading->move(m_kuangRightRect.x() - m_loading->width() - 10, m_kuangRightRect.y()+m_kuangRightRect.height()/2- m_loading->height()/2);
-//            m_loading->move(0, 0);
-            m_loading->show();
-            m_loadingMovie->start();
-        }
-    } else {
-        m_loading->hide();
-    }
 
     this->update();
 }
 
-QSize ChatMessage::fontRect(QString str)
+void ChatMessage::setPicture(QPixmap pixmap, QString time, QSize allSize, QString id, ChatMessage::User_Type userType)
+{
+    m_msg = "";
+    m_pic = pixmap;
+    m_userType = userType;
+    m_time = time;
+    m_curTime = QDateTime::fromTime_t(time.toInt()).toString("ddd hh:mm");
+    m_allSize = allSize;
+    m_id = id;
+    m_picRect = QRect(this->width()-allSize.width()*0.8-iconWH-iconSpaceW-iconRectW-iconTMPH,iconTMPH + 15,allSize.width()*0.8,allSize.height()*0.8);
+    //painter.drawPixmap(m_picRect, m_pic);
+    this->update();
+}
+
+QSize ChatMessage::fontRect(QString str = "")
 {
     m_msg = str;
-    int minHei = 30;
-    int iconWH = 40;
-    int iconSpaceW = 20;
-    int iconRectW = 5;
-    int iconTMPH = 10;
-    int sanJiaoW = 6;
-    int kuangTMP = 20;
-    int textSpaceRect = 12;
+
     m_kuangWidth = this->width() - kuangTMP - 2*(iconWH+iconSpaceW+iconRectW);
     m_textWidth = m_kuangWidth - 2*textSpaceRect;
     m_spaceWid = this->width() - m_textWidth;
@@ -213,23 +194,37 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         painter.drawRoundedRect(m_iconRightRect,m_iconRightRect.width(),m_iconRightRect.height());
         painter.drawPixmap(m_iconRightRect, m_rightPixmap);
 
-        //框
-        QColor col_Kuang(75,164,242);
-        painter.setBrush(QBrush(col_Kuang));
-        painter.drawRoundedRect(m_kuangRightRect,4,4);
+        //文字
+        if(m_msg!=""){
+            //框
+            QColor col_Kuang(75,164,242);
+            painter.setBrush(QBrush(col_Kuang));
+            painter.drawRoundedRect(m_kuangRightRect,4,4);
 
-        //三角
-        QPointF points[3] = {
-            QPointF(m_sanjiaoRightRect.x()+m_sanjiaoRightRect.width(), 40),
-            QPointF(m_sanjiaoRightRect.x(), 35),
-            QPointF(m_sanjiaoRightRect.x(), 45),
-        };
-        QPen pen;
-        pen.setColor(col_Kuang);
-        painter.setPen(pen);
-        painter.drawPolygon(points, 3);
+            //三角
+            QPointF points[3] = {
+                QPointF(m_sanjiaoRightRect.x()+m_sanjiaoRightRect.width(), 40),
+                QPointF(m_sanjiaoRightRect.x(), 35),
+                QPointF(m_sanjiaoRightRect.x(), 45),
+            };
+            QPen pen;
+            pen.setColor(col_Kuang);
+            painter.setPen(pen);
+            painter.drawPolygon(points, 3);
+            /*---------------------文字内容------------------------*/
+            QPen penText;
+            penText.setColor(Qt::white);
+            painter.setPen(penText);
+            QTextOption option(Qt::AlignLeft | Qt::AlignVCenter);
+            option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+            painter.setFont(this->font());
+            painter.drawText(m_textRightRect,m_msg,option);
+        }
+        /*---------------------图片内容------------------------*/
+        else{
+            painter.drawPixmap(m_picRect, m_pic);
 
-
+        }
         //id
         QPen penid;
         penid.setColor(Qt::black);
@@ -240,14 +235,7 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         painter.setFont(f);
         painter.drawText(m_idRightRect, m_id, op);
 
-        //内容
-        QPen penText;
-        penText.setColor(Qt::white);
-        painter.setPen(penText);
-        QTextOption option(Qt::AlignLeft | Qt::AlignVCenter);
-        option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-        painter.setFont(this->font());
-        painter.drawText(m_textRightRect,m_msg,option);
+
     }  else if(m_userType == User_Type::User_Time) { // 时间
         QPen penText;
         penText.setColor(QColor(153,153,153));

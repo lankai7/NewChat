@@ -64,6 +64,36 @@ void chatwin::initUI()
     vScrollbar->setObjectName("vScrollbar");
     // 将垂直滚动条设置到QTableWidget中
     ui->listWidget->setVerticalScrollBar(vScrollbar);
+    //消息列表选中取消焦点蓝框
+
+}
+
+QPixmap chatwin::picRule(QPixmap pixmap)
+{
+
+    // 获取原始尺寸
+    int originalWidth = pixmap.width();
+    int originalHeight = pixmap.height();
+
+    // 假设你想要将图片的短边设置为 250 像素，并保持宽高比不变
+    int newWidth;
+    int newHeight;
+    if(originalWidth <= originalHeight){
+        newWidth = 250;
+        //缩放因子
+        float scaleFactor = static_cast<float>(newWidth) / originalWidth;
+        //计算高
+        newHeight = static_cast<int>(originalHeight * scaleFactor);
+    }
+    else{
+        newHeight = 250;
+        float scaleFactor = static_cast<float>(newHeight) / originalHeight;
+        newWidth = static_cast<int>(originalWidth * scaleFactor);
+    }
+
+    // 缩放图片
+    QPixmap scaledPixmap = pixmap.scaled(newWidth, newHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    return scaledPixmap;
 
 }
 
@@ -73,7 +103,7 @@ chatwin::~chatwin()
     closesocket(fd);
     close_Socket();
 }
-
+//获取名字
 void chatwin::get_name(QString Name){
     this->name_Me=Name;
 }
@@ -122,7 +152,7 @@ void chatwin::client_sent(const QString &buf)
         err("send data");
     }
 }
-
+/*-------------------接收消息--------------------*/
 void chatwin::child_fun(SOCKET fd)
 {
     int ret;
@@ -144,8 +174,17 @@ void chatwin::child_fun(SOCKET fd)
         else{
             name_She = QString::fromUtf8(recvName);
             QString strl = QString::fromUtf8(recvBuf);
-            qDebug()<<name_She<<":"<<strl<<endl;
-            emit resultReady_She(strl);
+            QByteArray byteArray = recvBuf;
+            PicByte *picbyte = new PicByte;
+            QPixmap pixmap = picbyte->createPixmapFromByteArray(byteArray);
+            if(picbyte->isPicture()){
+                emit Pic_She(pixmap);
+            }
+            else{
+                qDebug()<<name_She<<":"<<strl<<endl;
+                emit resultReady_She(strl);
+            }
+
         }
     }
     closesocket(fd);
@@ -184,10 +223,11 @@ void chatwin::allConnect()
     // 创建回车键的快捷键，将其连接到按钮的点击槽
     connect(ui->plainTextEdit, &QPlainTextEdit::textChanged, [this]() {
         QString text = ui->plainTextEdit->toPlainText();
+        QString index = ui->plainTextEdit->toPlainText().replace(" ", "");  // 去除开头和结尾的空白字符
         // 检查是否按下了 Shift 键
         Qt::KeyboardModifiers modifiers = QGuiApplication::keyboardModifiers();
         bool shiftPressed = (modifiers & Qt::ShiftModifier);
-        if (text.endsWith('\n')&&!shiftPressed) {
+        if (index.endsWith('\n')&&!shiftPressed) {
             // 移除最后一个字符（即换行符）
             text.chop(1);
             ui->plainTextEdit->setPlainText(text);
@@ -198,6 +238,8 @@ void chatwin::allConnect()
     //接收与发送消息显示
     connect(this,&chatwin::resultReady_She,this,&chatwin::recvMsg);
     connect(this,&chatwin::resultReady_Me,this,&chatwin::sendMsg);
+    connect(this,&chatwin::Pic_Me,this,&chatwin::sendPic);
+    connect(this,&chatwin::Pic_She,this,&chatwin::recvPic);
 
 }
 /*---------------服务器在线状态显示----------------*/
@@ -217,6 +259,7 @@ void chatwin::offline()
     ui->online->setPixmap(pixmap);
 }
 /*---------------------------------------------------------*/
+//处理消息显示
 void chatwin::dealMessage(ChatMessage *messageW, QListWidgetItem *item, QString text, QString time, QString id ,ChatMessage::User_Type type)
 {
     ui->listWidget->addItem(item);
@@ -225,7 +268,9 @@ void chatwin::dealMessage(ChatMessage *messageW, QListWidgetItem *item, QString 
     item->setSizeHint(size);
     messageW->setText(text, time, size, id, type);
     ui->listWidget->setItemWidget(item, messageW);
+
 }
+//处理时间显示
 void chatwin::dealMessageTime(QString curMsgTime)
 {
     bool isShowTime = false;
@@ -251,18 +296,19 @@ void chatwin::dealMessageTime(QString curMsgTime)
         ui->listWidget->setItemWidget(itemTime, messageTime);
     }
 }
-
-void chatwin::sendMsg(QString text)
+//处理图片显示
+void chatwin::dealPicture(ChatMessage *messageP, QListWidgetItem *item, QPixmap pixmap, QString time, QString id ,ChatMessage::User_Type type)
 {
-    QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
-    ChatMessage *message = new ChatMessage(ui->listWidget);
-    QListWidgetItem *item = new QListWidgetItem();
-    dealMessageTime(time);
-    dealMessage(message, item, text, time, name_Me ,ChatMessage::User_Me);
-    ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
-
+    ui->listWidget->addItem(item);
+    messageP->setFixedWidth(ui->listWidget->width());
+    messageP->fontRect("");
+    QSize p_size = pixmap.size();
+    item->setSizeHint(p_size);
+    messageP->setPicture(pixmap, time, p_size, id, type);
+    ui->listWidget->setItemWidget(item, messageP);
 }
 
+//接收消息
 void chatwin::recvMsg(QString text)
 {
     //提示音
@@ -275,6 +321,45 @@ void chatwin::recvMsg(QString text)
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 
 }
+//发送消息
+void chatwin::sendMsg(QString text)
+{
+    QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
+    ChatMessage *message = new ChatMessage(ui->listWidget);
+    QListWidgetItem *item = new QListWidgetItem();
+    dealMessageTime(time);
+    dealMessage(message, item, text, time, name_Me ,ChatMessage::User_Me);
+    ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
+
+}
+//接收图片
+void chatwin::recvPic(QPixmap pic)
+{
+    //提示音
+    QSound::play("://res/music/msg.wav");
+    QPixmap pixmap = picRule(pic);
+
+    QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
+    ChatMessage *message = new ChatMessage(ui->listWidget);
+    QListWidgetItem *item = new QListWidgetItem();
+    dealMessageTime(time);
+    dealPicture(message, item, pixmap, time, name_She ,ChatMessage::User_She);
+    ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
+}
+//发送图片
+void chatwin::sendPic(QPixmap pic)
+{
+    QPixmap pixmap = picRule(pic);
+
+    QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
+    ChatMessage *message = new ChatMessage(ui->listWidget);
+    QListWidgetItem *item = new QListWidgetItem();
+    dealMessageTime(time);
+    dealPicture(message, item, pixmap, time, name_Me ,ChatMessage::User_Me);
+    ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
+
+}
+
 
 /*--------------------按钮----------------------*/
 
@@ -290,7 +375,7 @@ void chatwin::on_min_btn_clicked()
 /*-----------------消息显示界面-------------------*/
 void chatwin::on_enter_btn_clicked()
 {
-    QString msg = ui->plainTextEdit->toPlainText().trimmed();
+    QString msg = ui->plainTextEdit->toPlainText();
     if(msg.size() == 0)
     {
         qDebug() << "empty";
@@ -335,3 +420,28 @@ void chatwin::mouseReleaseEvent(QMouseEvent *event) {
 }
 /*--------------------------------------------------*/
 
+//聊天功能栏：选择文件
+void chatwin::on_file_btn_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "选择文件", ".", "所有文件 (*);;图片 (*.png;*.jpg;*.jpeg;*.gif);;文本 (*.txt;*.doc;*.docx)");
+            if (!fileName.isEmpty()) {
+                // 如果用户选择了文件，处理文件名或执行其他操作
+                QMessageBox::information(this, "选择的文件", "你选择了文件: " + fileName);
+            }
+}
+//发送图片
+void chatwin::on_pic_btn_clicked()
+{
+    PicByte *picbyte = new PicByte;
+    QString fileName = QFileDialog::getOpenFileName(this, "选择图片", ".", "图片 (*.png;*.jpg;*.jpeg;*.gif)");
+            if (!fileName.isEmpty()) {
+                // 如果用户选择了文件，处理文件名或执行其他操作
+                //QPixmap pixmap(fileName); // 从文件路径加载图片
+                QByteArray imageData = picbyte->readImageAsByteArray(fileName);
+                QPixmap pixmap = picbyte->createPixmapFromByteArray(imageData);
+                this->client_sent(QString::fromUtf8(imageData));
+                qDebug()<<"***"<<QString::fromUtf8(imageData);
+                emit Pic_Me(pixmap);
+            }
+
+}
