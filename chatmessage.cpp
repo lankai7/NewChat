@@ -42,8 +42,14 @@ void ChatMessage::setPicture(QPixmap pixmap, QString time, QSize allSize, QStrin
     m_curTime = QDateTime::fromTime_t(time.toInt()).toString("ddd hh:mm");
     m_allSize = allSize;
     m_id = id;
-    m_picRect = QRect(this->width()-allSize.width()*0.8-iconWH-iconSpaceW-iconRectW-iconTMPH,iconTMPH + 15,allSize.width()*0.8,allSize.height()*0.8);
-    //painter.drawPixmap(m_picRect, m_pic);
+    if(userType == User_Me){
+        m_picRect = QRect(this->width()-allSize.width()*0.8-iconWH-iconSpaceW-iconRectW-iconTMPH,iconTMPH + 15,allSize.width()*0.8,allSize.height()*0.8);
+        //painter.drawPixmap(m_picRect, m_pic);
+    }
+    else{
+        m_picRect = QRect(iconWH+iconSpaceW+iconRectW+iconTMPH,iconTMPH + 15,allSize.width()*0.8,allSize.height()*0.8);
+        //painter.drawPixmap(m_picRect, m_pic);
+    }
     this->update();
 }
 
@@ -143,34 +149,49 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         painter.drawRoundedRect(m_iconLeftRect,m_iconLeftRect.width(),m_iconLeftRect.height());
         painter.drawPixmap(m_iconLeftRect, m_leftPixmap);
 
-        //框加边
-        QColor col_KuangB(234, 234, 234);
-        /*painter.setBrush(QBrush(col_KuangB));
-        painter.drawRoundedRect(m_kuangLeftRect.x()-1,m_kuangLeftRect.y()-1 + 10,m_kuangLeftRect.width()+2,m_kuangLeftRect.height()+2,4,4);
-        //框*/
-        QColor col_Kuang(251, 254, 109);
-        painter.setBrush(QBrush(col_Kuang));
-        painter.drawRoundedRect(m_kuangLeftRect,4,4);
+        if(m_msg!=""){
+            //框加边
+            QColor col_KuangB(234, 234, 234);
+            /*painter.setBrush(QBrush(col_KuangB));
+            painter.drawRoundedRect(m_kuangLeftRect.x()-1,m_kuangLeftRect.y()-1 + 10,m_kuangLeftRect.width()+2,m_kuangLeftRect.height()+2,4,4);
+            //框*/
+            QColor col_Kuang(251, 254, 109);
+            painter.setBrush(QBrush(col_Kuang));
+            painter.drawRoundedRect(m_kuangLeftRect,4,4);
 
-        //三角
-        QPointF points[3] = {
-            QPointF(m_sanjiaoLeftRect.x(), 40),
-            QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 35),
-            QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 45),
-        };
-        QPen pen;
-        pen.setColor(col_Kuang);
-        painter.setPen(pen);
-        painter.drawPolygon(points, 3);
+            //三角
+            QPointF points[3] = {
+                QPointF(m_sanjiaoLeftRect.x(), 40),
+                QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 35),
+                QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 45),
+            };
+            QPen pen;
+            pen.setColor(col_Kuang);
+            painter.setPen(pen);
+            painter.drawPolygon(points, 3);
 
-        //三角加边
-        /*QPen penSanJiaoBian;
-        penSanJiaoBian.setColor(col_KuangB);
-        painter.setPen(penSanJiaoBian);
-        painter.drawLine(QPointF(m_sanjiaoLeftRect.x() - 1, 30), QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 24));
-        painter.drawLine(QPointF(m_sanjiaoLeftRect.x() - 1, 30), QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 36));
-        */
-        //id
+            //三角加边
+            /*QPen penSanJiaoBian;
+            penSanJiaoBian.setColor(col_KuangB);
+            painter.setPen(penSanJiaoBian);
+            painter.drawLine(QPointF(m_sanjiaoLeftRect.x() - 1, 30), QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 24));
+            painter.drawLine(QPointF(m_sanjiaoLeftRect.x() - 1, 30), QPointF(m_sanjiaoLeftRect.x()+m_sanjiaoLeftRect.width(), 36));
+            */
+
+            //内容
+            QPen penText;
+            penText.setColor(QColor(51,51,51));
+            painter.setPen(penText);
+            QTextOption option(Qt::AlignLeft | Qt::AlignVCenter);
+            option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+            painter.setFont(this->font());
+            painter.drawText(m_textLeftRect, m_msg,option);
+        }
+
+        else{
+            painter.drawPixmap(m_picRect, m_pic);
+        }
+
         //id
         QPen penid;
         penid.setColor(Qt::darkGray);
@@ -181,14 +202,6 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         painter.setFont(f);
         painter.drawText(m_idLeftRect, m_id, op);
 
-        //内容
-        QPen penText;
-        penText.setColor(QColor(51,51,51));
-        painter.setPen(penText);
-        QTextOption option(Qt::AlignLeft | Qt::AlignVCenter);
-        option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-        painter.setFont(this->font());
-        painter.drawText(m_textLeftRect, m_msg,option);
     }  else if(m_userType == User_Type::User_Me) { // 自己
         //头像
         painter.drawRoundedRect(m_iconRightRect,m_iconRightRect.width(),m_iconRightRect.height());
@@ -247,5 +260,17 @@ void ChatMessage::paintEvent(QPaintEvent *event)
         te_font.setPointSize(10);
         painter.setFont(te_font);
         painter.drawText(this->rect(),m_curTime,option);
+    }
+    else{//系统
+        QPen penText;
+        penText.setColor(QColor(153,153,153));
+        painter.setPen(penText);
+        QTextOption option(Qt::AlignCenter);
+        option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        QFont te_font = this->font();
+        te_font.setFamily("MicrosoftYaHei");
+        te_font.setPointSize(10);
+        painter.setFont(te_font);
+        painter.drawText(this->rect(),m_msg,option);
     }
 };

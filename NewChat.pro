@@ -20,6 +20,7 @@ SOURCES += \
     SQLconnect.cpp \
     chatmessage.cpp \
     chatwin.cpp \
+    fileoperation.cpp \
     forgetdialog.cpp \
     login.cpp \
     logqueue.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     SQLconnect.h \
     chatmessage.h \
     chatwin.h \
+    fileoperation.h \
     forgetdialog.h \
     login.h \
     logqueue.h \

@@ -12,6 +12,13 @@
 #include <QStringListModel>
 #include <QSound>
 #include <algorithm>
+#include <QApplication>
+#include <QScreen>
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
 
 chatwin::chatwin(QWidget *parent, QString Name) :
     QWidget(parent),
@@ -22,6 +29,7 @@ chatwin::chatwin(QWidget *parent, QString Name) :
     this->initUI();
     //全部connect函数
     this->allConnect();
+
     //style文件
     QFile file("://res/styles/style_chat.css");
     file.open(QFile::ReadOnly);
@@ -47,6 +55,10 @@ void chatwin::initUI()
     //初始化客户端聊天昵称
     std::thread proc_client_init(&chatwin::Client_init,this, this->name_Me);
     proc_client_init.detach();
+
+    //文件传输
+    fileMe = new fileoperation;
+    fileShe = new fileoperation;
 
     //最小化图标
     QPixmap picMin(":/res/icons/minblue.png");
@@ -111,10 +123,10 @@ void chatwin::get_name(QString Name){
 void chatwin::Client_init(QString Name)
 {
     init_Socket();
-    fd = create_clientSocket("127.0.0.1");
+    fd = create_clientSocket("127.0.0.1",9999);
     while(fd == INVALID_SOCKET){
         offline();
-        fd = create_clientSocket("127.0.0.1");
+        fd = create_clientSocket("127.0.0.1",9999);
     }
     online();
     // 发送用户名到服务器
@@ -140,14 +152,36 @@ void chatwin::Client_init(QString Name)
 
 }
 /*---------------客户端发送消息-------------------*/
-void chatwin::client_sent(const QString &buf)
+void chatwin::client_sent(const QString ty, const QString buf)
 {
-    QByteArray byteArray = buf.toUtf8();
-    const char *data = byteArray.constData();
-    int dataSize = byteArray.size();
+    int retData;
+    QByteArray byteType = ty.toUtf8();
+    const char *type = byteType.constData();
+    int typeSize = byteType.size();
+    int retType = send(fd, type, typeSize, 0);
 
-    int ret = send(fd, data, dataSize, 0);
-    if (ret <= 0) {
+    if(ty == type_pic_){    //图片信息
+        std::string str = std::to_string(fileMe->g_fileSize);
+        const char* buffer = str.c_str();
+        retData = send(fd, buffer, sizeof(buffer), 0);
+
+        fileMe->sendFile(fd);
+    }
+    else if(ty == type_sys_){
+        QByteArray byteData = buf.toUtf8();
+        const char *data = byteData.constData();
+        int dataSize = byteData.size();
+        retData = send(fd, data, dataSize, 0);
+    }
+    else{   //文字信息
+        QByteArray byteData = buf.toUtf8();
+        const char *data = byteData.constData();
+        int dataSize = byteData.size();
+        retData = send(fd, data, dataSize, 0);
+    }
+
+
+    if (retType <= 0||retData<=0) {
         // 假设 err 是一个接受字符串参数的自定义错误处理函数
         err("send data");
     }
@@ -155,36 +189,42 @@ void chatwin::client_sent(const QString &buf)
 /*-------------------接收消息--------------------*/
 void chatwin::child_fun(SOCKET fd)
 {
-    int ret;
     char recvName[256];
-    char recvBuf[1024];
-
+    char recvType[256];
+    char recvData[102400];
+    string g_data;
     while (1) {
         memset(recvName, 0, sizeof(recvName));
-        memset(recvBuf, 0, sizeof(recvBuf));
-        ret = recv(fd, recvName, sizeof(recvName), 0);
-        ret = recv(fd, recvBuf, sizeof(recvBuf), 0);
+        memset(recvType, 0, sizeof(recvType));
+        memset(recvData, 0, sizeof(recvData));
+        int retName = recv(fd, recvName, sizeof(recvName), 0);
+        int retType = recv(fd, recvType, sizeof(recvType), 0);
+        int retData = recv(fd, recvData, sizeof(recvData), 0);
+        if(strcmp(recvType, "type_pic_") == 0){
+            char* endptr;
+            fileShe->g_fileSize = std::strtol(recvData, &endptr, 10);
+            fileShe->recvFile(fd);
+        }
 
-        if (ret <= 0) {
+        if (retName <= 0||retType <= 0||retData <= 0) {
             err("recv");
             std::thread proc_client_init(&chatwin::Client_init,this, this->name_Me);
             proc_client_init.detach();
             break;
         }
-        else{
-            name_She = QString::fromUtf8(recvName);
-            QString strl = QString::fromUtf8(recvBuf);
-            QByteArray byteArray = recvBuf;
-            PicByte *picbyte = new PicByte;
-            QPixmap pixmap = picbyte->createPixmapFromByteArray(byteArray);
-            if(picbyte->isPicture()){
-                emit Pic_She(pixmap);
-            }
-            else{
-                qDebug()<<name_She<<":"<<strl<<endl;
-                emit resultReady_She(strl);
-            }
 
+        QString Name_she = QString::fromUtf8(recvName);
+        if(strcmp(recvType, "type_msg_") == 0){
+            QString strl = QString::fromUtf8(recvData);
+            emit resultReady_She(Name_she, strl);
+        }
+        else if(strcmp(recvType, "type_sys_") == 0){
+            QString strl = QString::fromUtf8(recvData);
+            emit Sys_Msg(Name_she, strl);
+        }
+        else{
+            fileShe->dealPic();
+            emit Pic_She(Name_she, fileShe->pixmap);
         }
     }
     closesocket(fd);
@@ -240,6 +280,8 @@ void chatwin::allConnect()
     connect(this,&chatwin::resultReady_Me,this,&chatwin::sendMsg);
     connect(this,&chatwin::Pic_Me,this,&chatwin::sendPic);
     connect(this,&chatwin::Pic_She,this,&chatwin::recvPic);
+    //系统提醒
+    connect(this,&chatwin::Sys_Msg,this,&chatwin::sysMsg);
 
 }
 /*---------------服务器在线状态显示----------------*/
@@ -308,16 +350,26 @@ void chatwin::dealPicture(ChatMessage *messageP, QListWidgetItem *item, QPixmap 
     ui->listWidget->setItemWidget(item, messageP);
 }
 
+void chatwin::dealSystem(ChatMessage *messageW, QListWidgetItem *item, QString text, QString time, QString id, ChatMessage::User_Type type)
+{
+    ui->listWidget->addItem(item);
+    messageW->setFixedWidth(ui->listWidget->width());
+    QSize size = QSize(ui->listWidget->width() , 40);
+    item->setSizeHint(size);
+    messageW->setText(text, time, size, id, type);
+    ui->listWidget->setItemWidget(item, messageW);
+}
+
 //接收消息
-void chatwin::recvMsg(QString text)
+void chatwin::recvMsg(QString Name_she, QString text)
 {
     //提示音
-    QSound::play("://res/music/msg.wav");
+    //QSound::play("://res/music/msg.wav");
     QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
     ChatMessage *message = new ChatMessage(ui->listWidget);
     QListWidgetItem *item = new QListWidgetItem();
     dealMessageTime(time);
-    dealMessage(message, item, text, time, name_She ,ChatMessage::User_She);
+    dealMessage(message, item, text, time, Name_she ,ChatMessage::User_She);
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 
 }
@@ -333,17 +385,17 @@ void chatwin::sendMsg(QString text)
 
 }
 //接收图片
-void chatwin::recvPic(QPixmap pic)
+void chatwin::recvPic(QString Name_She, QPixmap pic)
 {
     //提示音
-    QSound::play("://res/music/msg.wav");
+    //QSound::play("://res/music/msg.wav");
     QPixmap pixmap = picRule(pic);
 
     QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
     ChatMessage *message = new ChatMessage(ui->listWidget);
     QListWidgetItem *item = new QListWidgetItem();
     dealMessageTime(time);
-    dealPicture(message, item, pixmap, time, name_She ,ChatMessage::User_She);
+    dealPicture(message, item, pixmap, time, Name_She ,ChatMessage::User_She);
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 }
 //发送图片
@@ -358,6 +410,17 @@ void chatwin::sendPic(QPixmap pic)
     dealPicture(message, item, pixmap, time, name_Me ,ChatMessage::User_Me);
     ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 
+}
+//系统提示
+void chatwin::sysMsg(const QString Name, const QString text)
+{
+
+    QString time = QString::number(QDateTime::currentDateTimeUtc().toTime_t());
+    ChatMessage *message = new ChatMessage(ui->listWidget);
+    QListWidgetItem *item = new QListWidgetItem();
+    dealMessageTime(time);
+    dealSystem(message, item, Name+text, time, Name ,ChatMessage::User_System);
+    ui->listWidget->verticalScrollBar()->setValue(ui->listWidget->verticalScrollBar()->maximum());
 }
 
 
@@ -384,7 +447,7 @@ void chatwin::on_enter_btn_clicked()
     qDebug()<<msg;
     ui->plainTextEdit->setPlainText("");
     emit resultReady_Me(msg);
-    this->client_sent(msg);
+    this->client_sent(type_msg_, msg);
 }
 
 /*--------------------音乐按钮---------------------*/
@@ -432,16 +495,35 @@ void chatwin::on_file_btn_clicked()
 //发送图片
 void chatwin::on_pic_btn_clicked()
 {
-    PicByte *picbyte = new PicByte;
     QString fileName = QFileDialog::getOpenFileName(this, "选择图片", ".", "图片 (*.png;*.jpg;*.jpeg;*.gif)");
             if (!fileName.isEmpty()) {
                 // 如果用户选择了文件，处理文件名或执行其他操作
-                //QPixmap pixmap(fileName); // 从文件路径加载图片
-                QByteArray imageData = picbyte->readImageAsByteArray(fileName);
-                QPixmap pixmap = picbyte->createPixmapFromByteArray(imageData);
-                this->client_sent(QString::fromUtf8(imageData));
-                qDebug()<<"***"<<QString::fromUtf8(imageData);
-                emit Pic_Me(pixmap);
+
+                QByteArray byteName = fileName.toUtf8();  // 使用toUtf8()转换为UTF-8编码的QByteArray
+                char* file_name = byteName.data();  // 获取指向QByteArray数据的char*指针
+                fileMe->readPic(file_name);
+
+                client_sent(type_pic_, "buf");
+                emit Pic_Me(fileMe->pixmap);
+                return;
             }
 
+}
+
+void chatwin::on_cut_btn_clicked()
+{
+    // 获取主屏幕的截图
+    QPixmap screenshot = QGuiApplication::primaryScreen()->grabWindow(0);
+    screenshot.save("screenshot.png");
+
+    fileMe->readPic("screenshot.png");
+    client_sent(type_pic_, "buf");
+    emit Pic_Me(fileMe->pixmap);
+    return;
+}
+
+void chatwin::on_zd_btn_clicked()
+{
+    this->client_sent(type_sys_, "挥了挥手~");
+    emit Sys_Msg(name_Me, "挥了挥手~");
 }

@@ -25,7 +25,7 @@ bool close_Socket();
 /*SOCKET create_serverSocket();*/
 
 //客户端：创建客户端socket
-SOCKET create_clientSocket(const char* ip);
+SOCKET create_clientSocket(const char* ip, const int PORT);
 
 
 #endif
