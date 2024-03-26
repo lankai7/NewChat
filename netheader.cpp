@@ -3,9 +3,9 @@
 #include <QDebug>
 #include <time.h>
 
-QUEUE_DATA<MESG> queue_send; //�ı�����Ƶ���Ͷ���
-QUEUE_DATA<MESG> queue_recv; //���ն���
-QUEUE_DATA<MESG> audio_recv; //��Ƶ���ն���
+QUEUE_DATA<MESG> queue_send;
+QUEUE_DATA<MESG> queue_recv;
+QUEUE_DATA<MESG> audio_recv;
 
 LogQueue *logqueue = nullptr;
 

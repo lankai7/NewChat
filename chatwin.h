@@ -70,6 +70,9 @@ private:
     //鼠标位置坐标
     QPoint dragPosition;
 
+    //ip与端口号
+    const char* c_ip = "127.0.0.1";
+    const int c_PROT = 9999;
     //客户端连接
     SOCKET fd;
     //客户端名称

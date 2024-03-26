@@ -123,10 +123,10 @@ void chatwin::get_name(QString Name){
 void chatwin::Client_init(QString Name)
 {
     init_Socket();
-    fd = create_clientSocket("127.0.0.1",9999);
+    fd = create_clientSocket(this->c_ip, this->c_PROT);
     while(fd == INVALID_SOCKET){
         offline();
-        fd = create_clientSocket("127.0.0.1",9999);
+        fd = create_clientSocket(this->c_ip, this->c_PROT);
     }
     online();
     // 发送用户名到服务器
