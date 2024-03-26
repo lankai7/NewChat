@@ -66,7 +66,7 @@ NewChat 为用户提供了一个方便、实时的聊天室平台，使用户能
 - [使用说明](#使用说明)
 	- [打包](#打包)
 - [徽章](#徽章)
-- [示例](#示例)
+- [更新](#更新)
 - [相关仓库](#相关仓库)
 - [维护者](#维护者)
 - [如何贡献](#如何贡献)
@@ -194,9 +194,9 @@ windeployqt NewChat.exe
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-## 示例
+## 更新
 
-暂无
+- 🚀 v1.0 已经发布，现在你可以使用NewChat进行流畅的文本、图片、文件传输！
 
 ## 相关仓库
 
