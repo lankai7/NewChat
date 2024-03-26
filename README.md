@@ -6,41 +6,57 @@
 
  简体中文 / [English](./README_US.md)
 	
-NewChat服务器----基于Qt框架的tcp/ip聊天室服务器 -windows版本（后续会有linux版）
+NewChat客户端----基于Qt框架的tcp/ip聊天室程序
 
-快捷简便的构建自己的私人服务器，再也不怕聊天信息泄露了
+快捷简便的构建自己的私人聊天室，再也不怕聊天信息泄露了
 
-NewChat客户端：https://github.com/lankai7/NewChat
+NewChat服务器：https://github.com/lankai7/NewChatServer_windows
 
 [![standard-readme compliant](https://camo.githubusercontent.com/da0e1f4bf0a54a3283639676aa88bfcc5b3ee3377e9246b6de813371e17cf54e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d57696e646f77732d626c75653f6c6f676f3d77696e646f7773)](https://github.com/lankai7/NewChatServer_windows/tree/master)
 
-[客户端](https://github.com/lankai7/NewChat) / [服务端](https://github.com/lankai7/NewChatServer_windows) / [反馈](https://github.com/lankai7/NewChatServer_windows/issues)
+[客户端](https://github.com/lankai7/NewChat.git) / [服务端](https://github.com/lankai7/NewChatServer_windows) / [反馈](https://github.com/lankai7/NewChat/issues)
 
 </div>
 
-## NewChat_Server
+## NewChat
 
-"NewChat_Server" 是一个基于 C/C++ 框架的 TCP/IP 聊天室服务器，旨在为用户提供实时的文本、图像、语音、聊天功能。它可以与多个客户端建立 TCP 连接，并且允许客户端之间进行即时通讯,利用了Qt进行图形界面设计。
+"NewChat" 是一个基于 C/C++ 框架的 TCP/IP 聊天室客户端，旨在为用户提供实时的文本、图像、语音、聊天功能。它可以与多个客户端建立 TCP 连接，并且允许客户端之间进行即时通讯,利用了Qt进行图形界面设计。
 
 以下是该服务器的一般功能和特点：
 
-1.采用[TCP/IP 协议](https://baike.baidu.com/item/TCP%2FIP%E5%8D%8F%E8%AE%AE/212915?fr=ge_ala)的连接管理方式。
+1.TCP/IP 连接:
 
-2.简单便捷的消息传递，支持文字、图片、语音、文件等**多种数据传输**。
+> NewChat 使用 TCP/IP 协议来建立与服务器的连接，确保**稳定的通信和数据传输**。
 
-3.简便的用户管理，**即时**查看与管理。
+2.实时聊天功能: 
 
-4.**统一**的消息格式，便于查看与阅读。
+> 用户可以通过 NewChat **实时**进行文本、图像和语音消息的发送和接收，实现**即时通讯**。
 
-5.Qt平台设计图形界面，分布精美。
+3.多客户端支持: 
 
-6.具有**良好的安全性**，防止消息泄露。
+> NewChat 允许**多个客户端同时连接**到服务器，从而支持**多用户**同时在线，实现群聊和私聊功能。
 
-7.拥有**日志记录**与输出，自动**记录在文件**中，便于查询问题。
+4.图形界面设计: 
 
-8.利用**C/C++作为底层逻辑**，具有良好的**跨平台性**。
+> 利用 Qt 框架进行图形用户界面（GUI）设计，使用户操作更加**直观友好**，提升用户体验。
 
-Chat_Server 服务器为用户提供了一个方便、实时的聊天室平台，使用户能够轻松地与其他用户进行沟通和交流。
+5.安全性:
+
+> NewChat 考虑了安全性，在数据传输和用户身份验证方面进行了相应的处理，以**保障用户信息和通信的安全性**。
+
+6.可扩展性:
+
+> NewChat 的设计考虑了可扩展性，可以通过添加**新的功能模块**或者进行性能优化来满足不同场景下的需求。
+
+7.跨平台性:
+
+> 基于 C/C++ 和 Qt 框架开发，NewChat 具有**跨平台**特性，可以在不同操作系统上运行，如Windows、Linux、macOS 等。
+
+8.用户友好性:
+
+> NewChat 设计简洁易用，用户可以通过直观的界面**快速上手**，并享受到**流畅**的聊天体验。
+
+NewChat 为用户提供了一个方便、实时的聊天室平台，使用户能够轻松地与其他用户进行沟通和交流。
 
 
 ## 内容列表
@@ -93,15 +109,15 @@ $ C++ 11
 
 **项目文件构成：**
 ```sh
-Chat_Server/	//项目文件夹
+NewChat/	//项目文件夹
 │
-├──── icon/		//图标文件
+├──── res/		//资源文件
+│	├── bak/	//背景图
+│	├── icons/	//按键图标
+│	├── music/	//音频文件
+│	└── styles/	//css文件
 │
-├──── res/	
-│	│
-│	└── pic/	//背景文件
-│
-├──── Chat_Server.pro	//项目文件
+├──── NewChat.pro	//项目文件
 │
 ├──── xx.h	//头文件
 │
@@ -112,27 +128,26 @@ Chat_Server/	//项目文件夹
 └──── xx.qrc	//资源二进制文件
 ```
 
-对于**日志文件**，在项目构建的目录下会自动生成/log/文件夹，日志文件保存在以输出时的日期作为名字的txt文件中，日志文件中带有输出时的时间。
+对于**数据库的更改**，我采用的是SQLServer，在SQLconnect.h中进行了相关操作的声明，具体实现是在SQLconnect.cpp中
 
-其中日志文件文件夹创建：
+其中在SQLconnect.cpp中更改数据库：
 
 ```sh
-/*------------------日志文件文件夹创建--------------------*/
-//创建日志文件夹
-    QString folderName = "logs";
-        QDir dir;
-        if (!dir.exists(folderName)) {
-            if (dir.mkdir(folderName)) {
-                qDebug() << "Folder created successfully: " << folderName;
-            } else {
-                qDebug() << "Failed to create folder: " << folderName;
-            }
-        } else {
-            qDebug() << "Folder already exists: " << folderName;
-        }
+/*------------------数据库记录用户账户密码--------------------*/
+SQLconnect::SQLconnect(){
+    // 设置ODBC数据源名称
+    db.setDatabaseName("这里是表格名称");
+    // 设置连接用户名和密码
+    db.setUserName("用户名");
+    db.setPassword("密码");
+    // 打开数据库连接
+    if (db.open()) {
+        qDebug() << "Connected to SQL Server!";
+    }
+}
 ```
 
-对服务器中通讯连接的**IP与端口号的更改**在widget.h头文件中：
+对客户端中通讯连接的**IP与端口号的更改**：
 >⚠️ 注意：客户端与服务器的的IP与端口号**必须一致**才可以进行通讯
 
 ```sh
@@ -164,11 +179,11 @@ QT\5.12.10\mingw73_64\bin\qtenv2.bat
 C:\Windows\System32\cmd.exe /A /Q /K C:\xxxx\QT\5.12.10\mingw73_64\bin\qtenv2.bat
 #C:\xxxx\QT\5.12.10\mingw73_64\bin\qtenv2.bat 改成qtenv2.bat的地址
 ```
->创建一个新文件夹，将项目构建的运行文件Chat_Server.exe文件放入其中(推荐使用Release构建），运行qtenv2.bat,输入以下指令：
+>创建一个新文件夹，将项目构建的运行文件NewChat.exe文件放入其中(推荐使用Release构建），运行qtenv2.bat,输入以下指令：
 
 ```sh
 cd C:\xxx\xxx\   这里是新建的文件夹位置
-windeployqt Chat_Server.exe
+windeployqt NewChat.exe
 ```
 >等待加载完后即打包成功，可以打开NewChat.exe文件尝试是否成功。
 
@@ -185,7 +200,7 @@ windeployqt Chat_Server.exe
 
 ## 相关仓库
 
-- [NewChat](https://github.com/lankai7/NewChat) — NewChat客户端。
+- [NewChatServer_windows](https://github.com/lankai7/NewChatServer_windows) — windows系统下的NewChat服务器。
 
 ## 维护者
 
@@ -193,7 +208,7 @@ windeployqt Chat_Server.exe
 
 ## 如何贡献
 
-非常欢迎你的加入！[提一个 Issue](https://github.com/RichardLitt/standard-readme/issues/new) 或者提交一个 Pull Request。
+非常欢迎你的加入！[提一个 Issue](https://github.com/lankai7/NewChat/issues/new) 或者提交一个 Pull Request。
 
 
 ## 使用许可
