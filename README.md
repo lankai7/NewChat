@@ -1,8 +1,6 @@
 <div align="center">
 
-<img src="./res/bak/bak1.png" alt="icon"/>
-
-![Uploading bak.jpg…]()
+![bak1](https://github.com/lankai7/NewChat/assets/133182950/773a42c5-2178-4648-987a-45ec0d23702e)
 
  <h1 align="center">NewChat(Client)</h1>
 
