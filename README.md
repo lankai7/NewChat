@@ -2,6 +2,8 @@
 
 <img src="./res/bak/bak1.png" alt="icon"/>
 
+![Uploading bak.jpg…]()
+
  <h1 align="center">NewChat(Client)</h1>
 
  简体中文 / [English](./README_US.md)
