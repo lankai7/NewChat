@@ -1,6 +1,5 @@
 #include "login.h"
 #include "chatwin.h"
-
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -20,6 +19,8 @@ int main(int argc, char *argv[])
       chatwin* chatWin = new chatwin;
       chatWin->setWindowFlags(Qt::FramelessWindowHint);
       chatWin->show();
+
+
 
     return a.exec();
 }

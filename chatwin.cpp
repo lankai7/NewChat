@@ -29,6 +29,10 @@ chatwin::chatwin(QWidget *parent, QString Name) :
     this->initUI();
     //全部connect函数
     this->allConnect();
+    //表情页面
+    emoji = new EmojiPage(ui->plainTextEdit,this);
+    emoji->move(365,295);
+    emoji->hide();
 
     //style文件
     QFile file("://res/styles/style_chat.css");
@@ -186,6 +190,7 @@ void chatwin::client_sent(const QString ty, const QString buf)
         err("send data");
     }
 }
+
 /*-------------------接收消息--------------------*/
 void chatwin::child_fun(SOCKET fd)
 {
@@ -526,4 +531,14 @@ void chatwin::on_zd_btn_clicked()
 {
     this->client_sent(type_sys_, "挥了挥手~");
     emit Sys_Msg(name_Me, "挥了挥手~");
+}
+
+void chatwin::on_emoji_btn_clicked()
+{
+    if(emoji->isHidden()){
+        emoji->show();
+    }
+    else{
+        emoji->hide();
+    }
 }

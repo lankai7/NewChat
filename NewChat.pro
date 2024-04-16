@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    EmojiPage.cpp \
     PicByte.cpp \
     SQLconnect.cpp \
     chatmessage.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
     tcpsocket.cpp
 
 HEADERS += \
+    EmojiPage.h \
     PicByte.h \
     SQLconnect.h \
     chatmessage.h \
@@ -45,6 +47,7 @@ HEADERS += \
     tcpsocket.h
 
 FORMS += \
+    EmojiPage.ui \
     chatwin.ui \
     forgetdialog.ui \
     registerdialog.ui

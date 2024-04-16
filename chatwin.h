@@ -1,4 +1,3 @@
-void on_file_btn_clicked();
 #ifndef CHATWIN_H
 #define CHATWIN_H
 
@@ -22,6 +21,7 @@ void on_file_btn_clicked();
 #include <QFileDialog>
 #include "PicByte.h"
 #include "fileOperation.h"
+#include "EmojiPage.h"
 
 /*聊天主窗口*/
 
@@ -44,6 +44,7 @@ public:
     void Client_init(QString Name);
     //发送信息
     void client_sent(const QString ty, const QString buf);
+
 private:
     //接收信息子进程
     void child_fun(SOCKET fd);
@@ -82,7 +83,9 @@ private:
     //文件信息传输
     fileoperation* fileMe;
     fileoperation* fileShe;
-    QMutex mutex;
+    //表情窗口
+    EmojiPage *emoji;
+    bool checked = false;
 
     //消息类型
     QString type_msg_ = "type_msg_";    //消息
@@ -130,6 +133,8 @@ private slots:
     void on_cut_btn_clicked();
 
     void on_zd_btn_clicked();
+
+    void on_emoji_btn_clicked();
 
 signals:
     //移动窗口信号
