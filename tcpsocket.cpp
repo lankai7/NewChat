@@ -65,6 +65,7 @@ SOCKET create_clientSocket(const char* ip, const int PORT)
     addr.sin_addr.S_un.S_addr = inet_addr(ip);	//绑定服务器ip
     if (INVALID_SOCKET == connect(fd, (sockaddr*)&addr, sizeof(addr))){
         err("connect");
+        Sleep(3000);
         return INVALID_SOCKET;
     }
 

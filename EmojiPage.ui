@@ -20,12 +20,14 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">    border-radius: 10px; /* 设置圆角半径为10px */  
+   <string notr="true">	border-radius: 8px; /* 设置圆角半径为10px */  
     padding: 2px 2px; /* 添加内边距以显示边框与文本之间的空间 */  
     background-color: rgb(230, 230, 230); /* 设置背景颜色 */
 	font-size:20px;
+	color:rgba(0, 0, 0, 0);
     text-align: center; /* 文本居中 */  
-</string>
+
+	</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -38,7 +40,8 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton:hover {font-size:25px;}
-/*background-color:rgb(170, 255, 255)*/</string>
+
+</string>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -49,7 +52,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_16">
+        <widget class="QPushButton" name="btn_6">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -59,7 +62,7 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QPushButton" name="pushButton_17">
+        <widget class="QPushButton" name="btn_9">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -69,17 +72,17 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btn_12">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
          <property name="text">
-          <string>😀</string>
+          <string>😂</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton_12">
+        <widget class="QPushButton" name="btn_8">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -89,21 +92,21 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="pushButton_13">
+        <widget class="QPushButton" name="btn_16">
          <property name="text">
           <string>😴</string>
          </property>
         </widget>
        </item>
        <item row="2" column="5">
-        <widget class="QPushButton" name="pushButton_35">
+        <widget class="QPushButton" name="btn_15">
          <property name="text">
           <string>😞</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="btn_11">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -113,14 +116,14 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_7">
+        <widget class="QPushButton" name="btn_13">
          <property name="text">
           <string>🤪</string>
          </property>
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_5">
+        <widget class="QPushButton" name="btn_4">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -130,23 +133,24 @@
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QPushButton" name="pushButton_22">
+        <widget class="QPushButton" name="btn_19">
          <property name="text">
           <string>😡</string>
          </property>
         </widget>
        </item>
        <item row="3" column="5">
-        <widget class="QPushButton" name="pushButton_36">
+        <widget class="QPushButton" name="btn_20">
          <property name="text">
           <string>🤡</string>
          </property>
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QPushButton" name="pushButton_33">
+        <widget class="QPushButton" name="btn_5">
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">
+border: 0;</string>
          </property>
          <property name="text">
           <string>🤤</string>
@@ -154,24 +158,24 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="pushButton_18">
+        <widget class="QPushButton" name="btn_17">
          <property name="text">
           <string>🥳</string>
          </property>
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_6">
+        <widget class="QPushButton" name="btn_1">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
          <property name="text">
-          <string>😂</string>
+          <string>😀</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_11">
+        <widget class="QPushButton" name="btn_7">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -181,14 +185,14 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QPushButton" name="pushButton_23">
+        <widget class="QPushButton" name="btn_18">
          <property name="text">
           <string>😵‍💫</string>
          </property>
         </widget>
        </item>
        <item row="1" column="5">
-        <widget class="QPushButton" name="pushButton_34">
+        <widget class="QPushButton" name="btn_10">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -198,7 +202,7 @@
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="btn_3">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -208,14 +212,14 @@
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="QPushButton" name="pushButton_8">
+        <widget class="QPushButton" name="btn_14">
          <property name="text">
           <string>😒</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="btn_2">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -232,140 +236,140 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_10">
+        <widget class="QPushButton" name="btn_21">
          <property name="text">
           <string>💖</string>
          </property>
         </widget>
        </item>
        <item row="2" column="4">
-        <widget class="QPushButton" name="pushButton_28">
+        <widget class="QPushButton" name="btn_34">
          <property name="text">
           <string>🤎</string>
          </property>
         </widget>
        </item>
        <item row="0" column="4">
-        <widget class="QPushButton" name="pushButton_26">
+        <widget class="QPushButton" name="btn_24">
          <property name="text">
           <string>💗</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="pushButton_29">
+        <widget class="QPushButton" name="btn_36">
          <property name="text">
           <string>🤍</string>
          </property>
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QPushButton" name="pushButton_31">
+        <widget class="QPushButton" name="btn_38">
          <property name="text">
           <string>💟</string>
          </property>
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_25">
+        <widget class="QPushButton" name="btn_23">
          <property name="text">
           <string>💘</string>
          </property>
         </widget>
        </item>
        <item row="3" column="4">
-        <widget class="QPushButton" name="pushButton_32">
+        <widget class="QPushButton" name="btn_39">
          <property name="text">
           <string>💋</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton_19">
+        <widget class="QPushButton" name="btn_27">
          <property name="text">
           <string>💕</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton_14">
+        <widget class="QPushButton" name="btn_31">
          <property name="text">
           <string>💚</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_9">
+        <widget class="QPushButton" name="btn_26">
          <property name="text">
           <string>💞</string>
          </property>
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="QPushButton" name="pushButton_20">
+        <widget class="QPushButton" name="btn_33">
          <property name="text">
           <string>💜</string>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QPushButton" name="pushButton_30">
+        <widget class="QPushButton" name="btn_37">
          <property name="text">
           <string>💌</string>
          </property>
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_24">
+        <widget class="QPushButton" name="btn_22">
          <property name="text">
           <string>💝</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_21">
+        <widget class="QPushButton" name="btn_32">
          <property name="text">
           <string>💙</string>
          </property>
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="QPushButton" name="pushButton_27">
+        <widget class="QPushButton" name="btn_29">
          <property name="text">
           <string>🧡</string>
          </property>
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QPushButton" name="pushButton_15">
+        <widget class="QPushButton" name="btn_28">
          <property name="text">
           <string>💔</string>
          </property>
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QPushButton" name="pushButton_37">
+        <widget class="QPushButton" name="btn_25">
          <property name="text">
           <string>💓</string>
          </property>
         </widget>
        </item>
        <item row="1" column="5">
-        <widget class="QPushButton" name="pushButton_38">
+        <widget class="QPushButton" name="btn_30">
          <property name="text">
           <string>💛</string>
          </property>
         </widget>
        </item>
        <item row="2" column="5">
-        <widget class="QPushButton" name="pushButton_39">
+        <widget class="QPushButton" name="btn_35">
          <property name="text">
           <string>🖤</string>
          </property>
         </widget>
        </item>
        <item row="3" column="5">
-        <widget class="QPushButton" name="pushButton_40">
+        <widget class="QPushButton" name="btn_40">
          <property name="text">
           <string>💯</string>
          </property>
@@ -379,140 +383,140 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="3" column="2">
-        <widget class="QPushButton" name="pushButton_52">
+        <widget class="QPushButton" name="btn_58">
          <property name="text">
           <string>🫵</string>
          </property>
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QPushButton" name="pushButton_54">
+        <widget class="QPushButton" name="btn_49">
          <property name="text">
           <string>👍</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_43">
+        <widget class="QPushButton" name="btn_42">
          <property name="text">
           <string>🤏</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_47">
+        <widget class="QPushButton" name="btn_47">
          <property name="text">
           <string>🤟</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_51">
+        <widget class="QPushButton" name="btn_53">
          <property name="text">
           <string>🙌</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton_50">
+        <widget class="QPushButton" name="btn_48">
          <property name="text">
           <string>🖕</string>
          </property>
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_41">
+        <widget class="QPushButton" name="btn_41">
          <property name="text">
           <string>🫰</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton_48">
+        <widget class="QPushButton" name="btn_52">
          <property name="text">
           <string>👏</string>
          </property>
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QPushButton" name="pushButton_56">
+        <widget class="QPushButton" name="btn_59">
          <property name="text">
           <string>🤚</string>
          </property>
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_53">
+        <widget class="QPushButton" name="btn_44">
          <property name="text">
           <string>👋</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="pushButton_42">
+        <widget class="QPushButton" name="btn_57">
          <property name="text">
           <string>🤲</string>
          </property>
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_49">
+        <widget class="QPushButton" name="btn_43">
          <property name="text">
           <string>🖐️</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton_46">
+        <widget class="QPushButton" name="btn_51">
          <property name="text">
           <string>👊</string>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="pushButton_44">
+        <widget class="QPushButton" name="btn_56">
          <property name="text">
           <string>💪</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_45">
+        <widget class="QPushButton" name="btn_46">
          <property name="text">
           <string>🤙</string>
          </property>
         </widget>
        </item>
        <item row="2" column="3">
-        <widget class="QPushButton" name="pushButton_55">
+        <widget class="QPushButton" name="btn_54">
          <property name="text">
           <string>🙏</string>
          </property>
         </widget>
        </item>
        <item row="0" column="4">
-        <widget class="QPushButton" name="pushButton_57">
+        <widget class="QPushButton" name="btn_45">
          <property name="text">
           <string>🖖</string>
          </property>
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="QPushButton" name="pushButton_58">
+        <widget class="QPushButton" name="btn_50">
          <property name="text">
           <string>👎</string>
          </property>
         </widget>
        </item>
        <item row="2" column="4">
-        <widget class="QPushButton" name="pushButton_59">
+        <widget class="QPushButton" name="btn_55">
          <property name="text">
           <string>🤝</string>
          </property>
         </widget>
        </item>
        <item row="3" column="4">
-        <widget class="QPushButton" name="pushButton_60">
+        <widget class="QPushButton" name="btn_60">
          <property name="text">
           <string>🤞</string>
          </property>
